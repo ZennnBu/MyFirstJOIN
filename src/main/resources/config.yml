@@ -64,6 +64,29 @@ first-join:
         amount: 2
         name: "<gold>Welcome Gift"
 
+# Permission-based messages
+permission-messages:
+  enabled: true
+
+  groups:
+    owner:
+      permission: "joinplus.group.owner"
+      priority: 100
+      join: "<dark_gray>[<red>OWNER</red><dark_gray>] <white>%player% joined!"
+      quit: "<dark_gray>[<red>OWNER</red><dark_gray>] <white>%player% left!"
+
+    admin:
+      permission: "joinplus.group.admin"
+      priority: 90
+      join: "<dark_gray>[<gold>ADMIN</gold><dark_gray>] <white>%player% joined!"
+      quit: "<dark_gray>[<gold>ADMIN</gold><dark_gray>] <white>%player% left!"
+
+    media:
+      permission: "joinplus.group.media"
+      priority: 80
+      join: "<dark_gray>[<light_purple>MEDIA</light_purple><dark_gray>] <white>%player% joined!"
+      quit: "<dark_gray>[<light_purple>MEDIA</light_purple><dark_gray>] <white>%player% left!"
+
 messages:
   no-permission: "<red>You don't have permission!"
   reload: "<green>JoinPlus configuration reloaded!"
