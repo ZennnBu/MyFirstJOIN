@@ -16,6 +16,14 @@ join:
     enabled: true
     message: "<gradient:#00FFFF:#8000FF>Welcome back, %player%!</gradient>"
 
+  particles:
+    enabled: false
+    type: HAPPY_VILLAGER
+    count: 20
+    offset-x: 0.5
+    offset-y: 1.0
+    offset-z: 0.5
+
   items:
     enabled: false
     list:
@@ -52,6 +60,14 @@ first-join:
     volume: 1.0
     pitch: 1.0
 
+  particles:
+    enabled: true
+    type: TOTEM_OF_UNDYING
+    count: 30
+    offset-x: 0.7
+    offset-y: 1.0
+    offset-z: 0.7
+
   items:
     enabled: true
     list:
@@ -64,7 +80,6 @@ first-join:
         amount: 2
         name: "<gold>Welcome Gift"
 
-# Permission-based messages
 permission-messages:
   enabled: true
 
