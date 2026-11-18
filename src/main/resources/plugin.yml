@@ -10,12 +10,17 @@ commands:
   joinplus:
     description: Main JoinPlus command
     usage: /joinplus
-    aliases: [jp]
+    aliases:
+      - jp
 
 permissions:
   joinplus.admin:
     description: Full JoinPlus access
     default: op
+    children:
+      joinplus.reload: true
+      joinplus.test: true
+      joinplus.bypass: true
 
   joinplus.reload:
     description: Reload JoinPlus configuration
@@ -27,5 +32,17 @@ permissions:
 
   joinplus.bypass:
     description: Bypass configured join features
+    default: false
+
+  joinplus.group.owner:
+    description: Owner join and quit message
+    default: false
+
+  joinplus.group.admin:
+    description: Admin join and quit message
+    default: false
+
+  joinplus.group.media:
+    description: Media join and quit message
     default: false
     
