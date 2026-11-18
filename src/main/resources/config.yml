@@ -16,6 +16,14 @@ join:
     enabled: true
     message: "<gradient:#00FFFF:#8000FF>Welcome back, %player%!</gradient>"
 
+  items:
+    enabled: false
+    list:
+      compass:
+        material: COMPASS
+        amount: 1
+        name: "<aqua>Server Navigator"
+
 quit:
   enabled: true
   message: "<red>- <white>%player% <gray>left the server!"
@@ -43,6 +51,18 @@ first-join:
     name: "ENTITY_PLAYER_LEVELUP"
     volume: 1.0
     pitch: 1.0
+
+  items:
+    enabled: true
+    list:
+      welcome-compass:
+        material: COMPASS
+        amount: 1
+        name: "<gradient:#00FFFF:#8000FF>Welcome Compass</gradient>"
+      welcome-apple:
+        material: GOLDEN_APPLE
+        amount: 2
+        name: "<gold>Welcome Gift"
 
 messages:
   no-permission: "<red>You don't have permission!"
