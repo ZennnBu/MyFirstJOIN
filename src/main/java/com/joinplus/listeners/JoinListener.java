@@ -3,9 +3,11 @@ package com.joinplus.listeners;
 
 import com.joinplus.JoinPlus;
 import com.joinplus.managers.ActionBarManager;
+import com.joinplus.managers.JoinItemsManager;
 import com.joinplus.managers.TitleManager;
 import com.joinplus.utils.MessageUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,11 +19,13 @@ public class JoinListener implements Listener {
     private final JoinPlus plugin;
     private final TitleManager titleManager;
     private final ActionBarManager actionBarManager;
+    private final JoinItemsManager joinItemsManager;
 
     public JoinListener(JoinPlus plugin) {
         this.plugin = plugin;
         this.titleManager = new TitleManager(plugin);
         this.actionBarManager = new ActionBarManager(plugin);
+        this.joinItemsManager = new JoinItemsManager(plugin);
     }
 
     @EventHandler
@@ -39,15 +43,15 @@ public class JoinListener implements Listener {
 
         String message = plugin.getConfig().getString(path + ".message", "");
 
-        if (message != null && !message.isEmpty()) {
-            message = message.replace("%player%", player.getName());
+        if (message != null && !message.isEmpty()
+                && plugin.getConfig().getBoolean(path + ".broadcast", true)) {
 
-            if (plugin.getConfig().getBoolean(path + ".broadcast", true)) {
-                Bukkit.broadcast(MessageUtil.parse(message));
-            }
+            message = message.replace("%player%", player.getName());
+            Bukkit.broadcast(MessageUtil.parse(message));
         }
 
         actionBarManager.sendJoinActionBar(player, firstJoin);
+        joinItemsManager.giveJoinItems(player, firstJoin);
 
         if (firstJoin) {
             titleManager.sendFirstJoinTitle(player);
@@ -91,8 +95,7 @@ public class JoinListener implements Listener {
         );
 
         try {
-            org.bukkit.Sound sound =
-                    org.bukkit.Sound.valueOf(soundName.toUpperCase());
+            Sound sound = Sound.valueOf(soundName.toUpperCase());
 
             float volume = (float) plugin.getConfig()
                     .getDouble("first-join.sound.volume", 1.0);
