@@ -12,6 +12,10 @@ join:
   message: "<green>+ <white>%player% <gray>joined the server!"
   broadcast: true
 
+  actionbar:
+    enabled: true
+    message: "<gradient:#00FFFF:#8000FF>Welcome back, %player%!</gradient>"
+
 quit:
   enabled: true
   message: "<red>- <white>%player% <gray>left the server!"
@@ -29,6 +33,10 @@ first-join:
     fade-in: 10
     stay: 60
     fade-out: 20
+
+  actionbar:
+    enabled: true
+    message: "<gradient:#FFD700:#FF8C00>Welcome to the server, %player%!</gradient>"
 
   sound:
     enabled: true
