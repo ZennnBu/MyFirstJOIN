@@ -8,7 +8,14 @@ import org.bukkit.command.TabCompleter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JoinPlusTabCompleter implements TabCompleter {
+public final class JoinPlusTabCompleter implements TabCompleter {
+
+    private static final List<String> COMMANDS = List.of(
+            "help",
+            "info",
+            "reload",
+            "test"
+    );
 
     @Override
     public List<String> onTabComplete(
@@ -20,27 +27,29 @@ public class JoinPlusTabCompleter implements TabCompleter {
 
         List<String> suggestions = new ArrayList<>();
 
-        if (args.length == 1) {
+        if (args.length != 1) {
+            return suggestions;
+        }
 
-            String input = args[0].toLowerCase();
+        String input = args[0].toLowerCase();
 
-            if ("help".startsWith(input)) {
-                suggestions.add("help");
+        for (String subCommand : COMMANDS) {
+
+            if (!subCommand.startsWith(input)) {
+                continue;
             }
 
-            if ("info".startsWith(input)) {
-                suggestions.add("info");
+            if (subCommand.equals("reload")
+                    && !sender.hasPermission("joinplus.reload")) {
+                continue;
             }
 
-            if (sender.hasPermission("joinplus.reload")
-                    && "reload".startsWith(input)) {
-                suggestions.add("reload");
+            if (subCommand.equals("test")
+                    && !sender.hasPermission("joinplus.test")) {
+                continue;
             }
 
-            if (sender.hasPermission("joinplus.test")
-                    && "test".startsWith(input)) {
-                suggestions.add("test");
-            }
+            suggestions.add(subCommand);
         }
 
         return suggestions;
