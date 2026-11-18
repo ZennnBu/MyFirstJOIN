@@ -7,6 +7,11 @@
 settings:
   prefix: "<gradient:#00FFFF:#8000FF>[JoinPlus]</gradient>"
 
+update-checker:
+  enabled: true
+  notify-console: true
+  notify-admins: true
+
 join:
   enabled: true
   message: "<green>+ <white>%player% <gray>joined the server!"
