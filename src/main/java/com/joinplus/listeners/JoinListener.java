@@ -4,6 +4,7 @@ package com.joinplus.listeners;
 import com.joinplus.JoinPlus;
 import com.joinplus.managers.ActionBarManager;
 import com.joinplus.managers.JoinItemsManager;
+import com.joinplus.managers.ParticleManager;
 import com.joinplus.managers.PermissionMessageManager;
 import com.joinplus.managers.TitleManager;
 import com.joinplus.utils.MessageUtil;
@@ -22,6 +23,7 @@ public class JoinListener implements Listener {
     private final ActionBarManager actionBarManager;
     private final JoinItemsManager joinItemsManager;
     private final PermissionMessageManager permissionMessageManager;
+    private final ParticleManager particleManager;
 
     public JoinListener(JoinPlus plugin) {
         this.plugin = plugin;
@@ -30,6 +32,7 @@ public class JoinListener implements Listener {
         this.joinItemsManager = new JoinItemsManager(plugin);
         this.permissionMessageManager =
                 new PermissionMessageManager(plugin);
+        this.particleManager = new ParticleManager(plugin);
     }
 
     @EventHandler
@@ -65,6 +68,7 @@ public class JoinListener implements Listener {
 
         actionBarManager.sendJoinActionBar(player, firstJoin);
         joinItemsManager.giveJoinItems(player, firstJoin);
+        particleManager.playJoinParticles(player, firstJoin);
 
         if (firstJoin) {
             titleManager.sendFirstJoinTitle(player);
