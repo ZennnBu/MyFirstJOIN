@@ -1,0 +1,40 @@
+
+# =====================================
+#              JoinPlus
+#         Professional Configuration
+# =====================================
+
+settings:
+  prefix: "&8[&bJoinPlus&8]"
+
+join:
+  enabled: true
+  message: "&a+ &f%player% &7joined the server!"
+  broadcast: true
+
+quit:
+  enabled: true
+  message: "&c- &f%player% &7left the server!"
+  broadcast: true
+
+first-join:
+  enabled: true
+  message: "&6Welcome &e%player%&6! &7Enjoy your first adventure!"
+  broadcast: true
+
+  title:
+    enabled: true
+    title: "&b&lWELCOME!"
+    subtitle: "&fWelcome to &bOur Server"
+
+  sound:
+    enabled: true
+    name: "ENTITY_PLAYER_LEVELUP"
+    volume: 1.0
+    pitch: 1.0
+
+messages:
+  no-permission: "&cYou don't have permission!"
+  reload: "&aJoinPlus configuration reloaded!"
+  player-only: "&cThis command can only be used by players!"
+  
