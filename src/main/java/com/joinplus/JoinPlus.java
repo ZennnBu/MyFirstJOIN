@@ -2,6 +2,7 @@
 package com.joinplus;
 
 import com.joinplus.commands.JoinPlusCommand;
+import com.joinplus.commands.JoinPlusTabCompleter;
 import com.joinplus.listeners.JoinListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,17 +20,23 @@ public final class JoinPlus extends JavaPlugin {
                 new JoinListener(this), this
         );
 
-        if (getCommand("joinplus") != null) {
-            getCommand("joinplus").setExecutor(
-                    new JoinPlusCommand(this)
-            );
-        } else {
-            getLogger().severe("Command 'joinplus' is missing from plugin.yml!");
+        if (getCommand("joinplus") == null) {
+            getLogger().severe("Command missing from plugin.yml!");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
+        getCommand("joinplus").setExecutor(
+                new JoinPlusCommand(this)
+        );
+
+        getCommand("joinplus").setTabCompleter(
+                new JoinPlusTabCompleter()
+        );
+
         getLogger().info("JoinPlus Enabled Successfully!");
+        getLogger().info("Commands Registered!");
+        getLogger().info("Tab Completion Registered!");
     }
 
     @Override
