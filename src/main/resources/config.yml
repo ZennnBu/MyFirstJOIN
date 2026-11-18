@@ -1,31 +1,34 @@
 
-# =====================================
-#              JoinPlus
-#         Professional Configuration
-# =====================================
+# ==========================================
+#                 JoinPlus
+#          Professional Configuration
+# ==========================================
 
 settings:
-  prefix: "&8[&bJoinPlus&8]"
+  prefix: "<gradient:#00FFFF:#8000FF>[JoinPlus]</gradient>"
 
 join:
   enabled: true
-  message: "&a+ &f%player% &7joined the server!"
+  message: "<green>+ <white>%player% <gray>joined the server!"
   broadcast: true
 
 quit:
   enabled: true
-  message: "&c- &f%player% &7left the server!"
+  message: "<red>- <white>%player% <gray>left the server!"
   broadcast: true
 
 first-join:
   enabled: true
-  message: "&6Welcome &e%player%&6! &7Enjoy your first adventure!"
+  message: "<gradient:#FFD700:#FF8C00>Welcome %player%!</gradient> <gray>Enjoy your first adventure!"
   broadcast: true
 
   title:
     enabled: true
-    title: "&b&lWELCOME!"
-    subtitle: "&fWelcome to &bOur Server"
+    title: "<gradient:#00FFFF:#8000FF><bold>WELCOME!</bold></gradient>"
+    subtitle: "<white>Welcome to <aqua>Our Server</aqua>"
+    fade-in: 10
+    stay: 60
+    fade-out: 20
 
   sound:
     enabled: true
@@ -34,7 +37,12 @@ first-join:
     pitch: 1.0
 
 messages:
-  no-permission: "&cYou don't have permission!"
-  reload: "&aJoinPlus configuration reloaded!"
-  player-only: "&cThis command can only be used by players!"
-  
+  no-permission: "<red>You don't have permission!"
+  reload: "<green>JoinPlus configuration reloaded!"
+  player-only: "<red>This command can only be used by players!"
+  unknown-command: "<red>Unknown command! Use <yellow>/joinplus help"
+  prefix: "<dark_gray>[<aqua>JoinPlus<dark_gray>] "
+
+# ==========================================
+#                 END
+# ==========================================
