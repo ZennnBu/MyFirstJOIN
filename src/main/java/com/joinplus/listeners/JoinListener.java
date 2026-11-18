@@ -4,6 +4,7 @@ package com.joinplus.listeners;
 import com.joinplus.JoinPlus;
 import com.joinplus.managers.ActionBarManager;
 import com.joinplus.managers.JoinItemsManager;
+import com.joinplus.managers.PermissionMessageManager;
 import com.joinplus.managers.TitleManager;
 import com.joinplus.utils.MessageUtil;
 import org.bukkit.Bukkit;
@@ -20,12 +21,15 @@ public class JoinListener implements Listener {
     private final TitleManager titleManager;
     private final ActionBarManager actionBarManager;
     private final JoinItemsManager joinItemsManager;
+    private final PermissionMessageManager permissionMessageManager;
 
     public JoinListener(JoinPlus plugin) {
         this.plugin = plugin;
         this.titleManager = new TitleManager(plugin);
         this.actionBarManager = new ActionBarManager(plugin);
         this.joinItemsManager = new JoinItemsManager(plugin);
+        this.permissionMessageManager =
+                new PermissionMessageManager(plugin);
     }
 
     @EventHandler
@@ -41,13 +45,22 @@ public class JoinListener implements Listener {
             return;
         }
 
-        String message = plugin.getConfig().getString(path + ".message", "");
+        if (plugin.getConfig().getBoolean(path + ".broadcast", true)) {
+            var permissionMessage =
+                    permissionMessageManager.getJoinMessage(player);
 
-        if (message != null && !message.isEmpty()
-                && plugin.getConfig().getBoolean(path + ".broadcast", true)) {
+            if (permissionMessage != null) {
+                Bukkit.broadcast(permissionMessage);
+            } else {
+                String message = plugin.getConfig().getString(
+                        path + ".message", ""
+                );
 
-            message = message.replace("%player%", player.getName());
-            Bukkit.broadcast(MessageUtil.parse(message));
+                if (message != null && !message.isEmpty()) {
+                    message = message.replace("%player%", player.getName());
+                    Bukkit.broadcast(MessageUtil.parse(message));
+                }
+            }
         }
 
         actionBarManager.sendJoinActionBar(player, firstJoin);
@@ -69,6 +82,18 @@ public class JoinListener implements Listener {
             return;
         }
 
+        if (!plugin.getConfig().getBoolean("quit.broadcast", true)) {
+            return;
+        }
+
+        var permissionMessage =
+                permissionMessageManager.getQuitMessage(player);
+
+        if (permissionMessage != null) {
+            Bukkit.broadcast(permissionMessage);
+            return;
+        }
+
         String message = plugin.getConfig().getString("quit.message", "");
 
         if (message == null || message.isEmpty()) {
@@ -76,10 +101,7 @@ public class JoinListener implements Listener {
         }
 
         message = message.replace("%player%", player.getName());
-
-        if (plugin.getConfig().getBoolean("quit.broadcast", true)) {
-            Bukkit.broadcast(MessageUtil.parse(message));
-        }
+        Bukkit.broadcast(MessageUtil.parse(message));
     }
 
     private void playFirstJoinSound(Player player) {
