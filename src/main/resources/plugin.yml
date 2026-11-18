@@ -1,0 +1,31 @@
+
+name: JoinPlus
+version: 1.0.0
+main: com.joinplus.JoinPlus
+api-version: '26.2'
+author: JoinPlusTeam
+description: A professional Minecraft join and quit management plugin.
+
+commands:
+  joinplus:
+    description: Main JoinPlus command
+    usage: /joinplus
+    aliases: [jp]
+
+permissions:
+  joinplus.admin:
+    description: Full JoinPlus access
+    default: op
+
+  joinplus.reload:
+    description: Reload JoinPlus configuration
+    default: op
+
+  joinplus.test:
+    description: Test JoinPlus messages
+    default: op
+
+  joinplus.bypass:
+    description: Bypass configured join features
+    default: false
+    
