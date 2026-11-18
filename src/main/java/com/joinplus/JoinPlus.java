@@ -1,6 +1,7 @@
 
 package com.joinplus;
 
+import com.joinplus.listeners.JoinListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class JoinPlus extends JavaPlugin {
@@ -13,9 +14,14 @@ public final class JoinPlus extends JavaPlugin {
 
         saveDefaultConfig();
 
+        getServer().getPluginManager().registerEvents(
+                new JoinListener(this), this
+        );
+
         getLogger().info("================================");
         getLogger().info("        JoinPlus Enabled!");
         getLogger().info("        Version: " + getPluginMeta().getVersion());
+        getLogger().info("        JoinListener Registered!");
         getLogger().info("================================");
     }
 
