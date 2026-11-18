@@ -2,6 +2,7 @@
 package com.joinplus.listeners;
 
 import com.joinplus.JoinPlus;
+import com.joinplus.managers.TitleManager;
 import com.joinplus.utils.MessageUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -14,9 +15,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class JoinListener implements Listener {
 
     private final JoinPlus plugin;
+    private final TitleManager titleManager;
 
     public JoinListener(JoinPlus plugin) {
         this.plugin = plugin;
+        this.titleManager = new TitleManager(plugin);
     }
 
     @EventHandler
@@ -34,19 +37,17 @@ public class JoinListener implements Listener {
 
         String message = plugin.getConfig().getString(path + ".message", "");
 
-        if (message == null || message.isEmpty()) {
-            return;
-        }
+        if (message != null && !message.isEmpty()) {
+            message = message.replace("%player%", player.getName());
 
-        message = message.replace("%player%", player.getName());
-
-        if (plugin.getConfig().getBoolean(path + ".broadcast", true)) {
-            Component component = MessageUtil.parse(message);
-            Bukkit.broadcast(component);
+            if (plugin.getConfig().getBoolean(path + ".broadcast", true)) {
+                Bukkit.broadcast(MessageUtil.parse(message));
+            }
         }
 
         if (firstJoin) {
-            sendFirstJoinEffects(player);
+            titleManager.sendFirstJoinTitle(player);
+            playFirstJoinSound(player);
         }
     }
 
@@ -73,52 +74,39 @@ public class JoinListener implements Listener {
         }
     }
 
-    private void sendFirstJoinEffects(Player player) {
+    private void playFirstJoinSound(Player player) {
 
-        if (plugin.getConfig().getBoolean(
-                "first-join.title.enabled", true)) {
-
-            String title = plugin.getConfig().getString(
-                    "first-join.title.title", "");
-
-            String subtitle = plugin.getConfig().getString(
-                    "first-join.title.subtitle", "");
-
-            player.showTitle(
-                    net.kyori.adventure.title.Title.title(
-                            MessageUtil.parse(title),
-                            MessageUtil.parse(subtitle)
-                    )
-            );
+        if (!plugin.getConfig().getBoolean(
+                "first-join.sound.enabled", true)) {
+            return;
         }
 
-        if (plugin.getConfig().getBoolean(
-                "first-join.sound.enabled", true)) {
+        String soundName = plugin.getConfig().getString(
+                "first-join.sound.name",
+                "ENTITY_PLAYER_LEVELUP"
+        );
 
-            String soundName = plugin.getConfig().getString(
-                    "first-join.sound.name",
-                    "ENTITY_PLAYER_LEVELUP"
+        try {
+            org.bukkit.Sound sound =
+                    org.bukkit.Sound.valueOf(soundName.toUpperCase());
+
+            float volume = (float) plugin.getConfig()
+                    .getDouble("first-join.sound.volume", 1.0);
+
+            float pitch = (float) plugin.getConfig()
+                    .getDouble("first-join.sound.pitch", 1.0);
+
+            player.playSound(
+                    player.getLocation(),
+                    sound,
+                    volume,
+                    pitch
             );
 
-            try {
-                org.bukkit.Sound sound =
-                        org.bukkit.Sound.valueOf(soundName.toUpperCase());
-
-                float volume = (float) plugin.getConfig()
-                        .getDouble("first-join.sound.volume", 1.0);
-
-                float pitch = (float) plugin.getConfig()
-                        .getDouble("first-join.sound.pitch", 1.0);
-
-                player.playSound(
-                        player.getLocation(), sound, volume, pitch
-                );
-
-            } catch (IllegalArgumentException exception) {
-                plugin.getLogger().warning(
-                        "Invalid sound: " + soundName
-                );
-            }
+        } catch (IllegalArgumentException exception) {
+            plugin.getLogger().warning(
+                    "Invalid sound configured: " + soundName
+            );
         }
     }
 }
