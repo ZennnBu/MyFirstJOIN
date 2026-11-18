@@ -2,9 +2,9 @@
 package com.joinplus.listeners;
 
 import com.joinplus.JoinPlus;
+import com.joinplus.managers.ActionBarManager;
 import com.joinplus.managers.TitleManager;
 import com.joinplus.utils.MessageUtil;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,10 +16,12 @@ public class JoinListener implements Listener {
 
     private final JoinPlus plugin;
     private final TitleManager titleManager;
+    private final ActionBarManager actionBarManager;
 
     public JoinListener(JoinPlus plugin) {
         this.plugin = plugin;
         this.titleManager = new TitleManager(plugin);
+        this.actionBarManager = new ActionBarManager(plugin);
     }
 
     @EventHandler
@@ -44,6 +46,8 @@ public class JoinListener implements Listener {
                 Bukkit.broadcast(MessageUtil.parse(message));
             }
         }
+
+        actionBarManager.sendJoinActionBar(player, firstJoin);
 
         if (firstJoin) {
             titleManager.sendFirstJoinTitle(player);
