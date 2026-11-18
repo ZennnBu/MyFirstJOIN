@@ -2,9 +2,9 @@
 package com.joinplus.listeners;
 
 import com.joinplus.JoinPlus;
+import com.joinplus.utils.MessageUtil;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,32 +19,30 @@ public class JoinListener implements Listener {
         this.plugin = plugin;
     }
 
-    private String color(String message) {
-        return ChatColor.translateAlternateColorCodes('&', message);
-    }
-
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        event.setJoinMessage(null);
+        event.joinMessage(null);
 
         boolean firstJoin = !player.hasPlayedBefore();
-
         String path = firstJoin ? "first-join" : "join";
 
         if (!plugin.getConfig().getBoolean(path + ".enabled", true)) {
             return;
         }
 
-        String message = plugin.getConfig().getString(
-                path + ".message", ""
-        );
+        String message = plugin.getConfig().getString(path + ".message", "");
+
+        if (message == null || message.isEmpty()) {
+            return;
+        }
 
         message = message.replace("%player%", player.getName());
 
         if (plugin.getConfig().getBoolean(path + ".broadcast", true)) {
-            Bukkit.broadcastMessage(color(message));
+            Component component = MessageUtil.parse(message);
+            Bukkit.broadcast(component);
         }
 
         if (firstJoin) {
@@ -56,20 +54,22 @@ public class JoinListener implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
-        event.setQuitMessage(null);
+        event.quitMessage(null);
 
         if (!plugin.getConfig().getBoolean("quit.enabled", true)) {
             return;
         }
 
-        String message = plugin.getConfig().getString(
-                "quit.message", ""
-        );
+        String message = plugin.getConfig().getString("quit.message", "");
+
+        if (message == null || message.isEmpty()) {
+            return;
+        }
 
         message = message.replace("%player%", player.getName());
 
         if (plugin.getConfig().getBoolean("quit.broadcast", true)) {
-            Bukkit.broadcastMessage(color(message));
+            Bukkit.broadcast(MessageUtil.parse(message));
         }
     }
 
@@ -79,17 +79,16 @@ public class JoinListener implements Listener {
                 "first-join.title.enabled", true)) {
 
             String title = plugin.getConfig().getString(
-                    "first-join.title.title", ""
-            );
+                    "first-join.title.title", "");
 
             String subtitle = plugin.getConfig().getString(
-                    "first-join.title.subtitle", ""
-            );
+                    "first-join.title.subtitle", "");
 
-            player.sendTitle(
-                    color(title),
-                    color(subtitle),
-                    10, 60, 20
+            player.showTitle(
+                    net.kyori.adventure.title.Title.title(
+                            MessageUtil.parse(title),
+                            MessageUtil.parse(subtitle)
+                    )
             );
         }
 
@@ -102,7 +101,8 @@ public class JoinListener implements Listener {
             );
 
             try {
-                Sound sound = Sound.valueOf(soundName.toUpperCase());
+                org.bukkit.Sound sound =
+                        org.bukkit.Sound.valueOf(soundName.toUpperCase());
 
                 float volume = (float) plugin.getConfig()
                         .getDouble("first-join.sound.volume", 1.0);
@@ -111,10 +111,7 @@ public class JoinListener implements Listener {
                         .getDouble("first-join.sound.pitch", 1.0);
 
                 player.playSound(
-                        player.getLocation(),
-                        sound,
-                        volume,
-                        pitch
+                        player.getLocation(), sound, volume, pitch
                 );
 
             } catch (IllegalArgumentException exception) {
