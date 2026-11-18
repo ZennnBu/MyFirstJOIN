@@ -1,6 +1,7 @@
 
 package com.joinplus;
 
+import com.joinplus.commands.JoinPlusCommand;
 import com.joinplus.listeners.JoinListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,11 +19,17 @@ public final class JoinPlus extends JavaPlugin {
                 new JoinListener(this), this
         );
 
-        getLogger().info("================================");
-        getLogger().info("        JoinPlus Enabled!");
-        getLogger().info("        Version: " + getPluginMeta().getVersion());
-        getLogger().info("        JoinListener Registered!");
-        getLogger().info("================================");
+        if (getCommand("joinplus") != null) {
+            getCommand("joinplus").setExecutor(
+                    new JoinPlusCommand(this)
+            );
+        } else {
+            getLogger().severe("Command 'joinplus' is missing from plugin.yml!");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
+        getLogger().info("JoinPlus Enabled Successfully!");
     }
 
     @Override
